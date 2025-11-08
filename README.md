@@ -1,72 +1,80 @@
-# Projeto Integrador – 1º Trimestre  
+# Previsão de Churn Empresarial – Projeto Integrador 1º Trimestre  
 **Programa Avançado em Data Science e Decisão – Insper**  
 **Autores:** Ilana Garcia, Izabelle Silva, Júlia Borges, Lívia Bertoni  
+**Data:** Setembro de 2025  
 
 ---
 
-## 🧠 Contexto do Projeto
+## 🧠 Introdução
 
-Este projeto foi desenvolvido como parte da disciplina **Projeto Integrador** do 1º trimestre do Programa Avançado em Data Science e Decisão do **Insper**.  
-O objetivo é aplicar conceitos de **ciência de dados**, **estatística** e **aprendizado de máquina** em um problema real, explorando todas as etapas do ciclo de análise de dados: da limpeza e tratamento até a modelagem e avaliação dos resultados.
+Quando falamos em **churn** (rotatividade), normalmente pensamos em clientes que cancelam serviços ou deixam de consumir produtos. No entanto, o mesmo conceito pode ser aplicado ao **mundo empresarial**: empresas também podem encerrar suas atividades permanentemente — um fenômeno com grande impacto financeiro para bancos, fornecedores, investidores e consultores.
+
+O objetivo deste projeto é **desenvolver modelos de aprendizado de máquina capazes de prever se uma empresa encerrará suas operações nos dois anos seguintes**, utilizando dados reais da **Bisnode**, que reúne informações de empresas europeias.  
+
+A análise concentra-se no **snapshot de 2012**, contendo dados financeiros, demográficos e indicadores de risco de fechamento empresarial.
 
 ---
 
 ## 📊 Base de Dados
 
-A base utilizada é o **Bisnode dataset (snapshot de 2012)**, que contém informações sobre empresas europeias, incluindo dados financeiros, demográficos e de sobrevivência no mercado.  
-O foco da análise é compreender **fatores que influenciam a sobrevivência e o churn** de empresas.
+A base utilizada é o **Bisnode Dataset (2012)**, derivado de uma série temporal de 2005 a 2016.  
+O conjunto foi previamente limpo em **Python** e importado para **R**, já com variáveis tratadas e indicadores de imputação.
 
-**Arquivos incluídos no repositório:**
-- `cs_bisnode_panel.csv` — base de dados original  
-- `bisnode_variable_names.xls` — dicionário de variáveis  
-- `dataset_modelagem_final.csv` — base tratada e preparada para modelagem  
+Principais características da base:
+- **Unidade de análise:** empresa  
+- **Variável resposta:** `churn_in_2y_int`  
+  - `0` = empresa ativa  
+  - `1` = empresa encerrada em até 2 anos  
+- **Número de observações:** milhares de empresas europeias  
+- **Tipo de variáveis:** indicadores financeiros, flags de imputação, dados demográficos e histórico de vendas  
 
 ---
 
 ## ⚙️ Metodologia
 
 ### 1. Preparação dos dados
-- Seleção das variáveis contínuas (exames e sinais vitais financeiros)  
-- Tratamento de dados ausentes e padronização com o pacote **`recipes`** do **tidymodels**  
-- Análise exploratória e identificação de padrões  
-- Redução de dimensionalidade e agrupamento com **K-Means**
+- Tratamento de dados ausentes e padronização com o pacote **`recipes`** (tidymodels)  
+- Separação em conjuntos de **treino (80%)** e **teste (20%)**  
+- Balanceamento da variável resposta  
+- Seleção e transformação das variáveis numéricas e categóricas  
 
-### 2. Determinação dos clusters
-- Utilização dos métodos do **cotovelo** e do **índice de silhueta** para identificar o número ótimo de grupos
+### 2. Modelagem
+Foram testados três modelos principais:
+- **Regressão Logística (GLM)**  
+- **LASSO (Regularização L1)**  
+- **Random Forest**
 
-### 3. Visualização
-- Aplicação de **PCA (Análise de Componentes Principais)** para projeção dos grupos em 2D e visualização das relações entre variáveis e clusters
+### 3. Avaliação
+O desempenho foi comparado usando as seguintes métricas:
+- **AUC (Área sob a Curva ROC)**  
+- **Acurácia**  
+- **Precisão**  
+- **Recall (Sensibilidade)**  
+- **F1-score**  
+- **Brier Score**  
 
-### 4. Modelagem preditiva
-- Divisão treino/teste (80/20)  
-- Ajuste e comparação de três modelos:  
-  - Regressão Logística  
-  - Random Forest  
-  - XGBoost  
-- Avaliação com as métricas:  
-  - AUC  
-  - Acurácia  
-  - Sensibilidade  
-  - Especificidade  
+Essas métricas foram calculadas a partir do conjunto de teste, permitindo comparar o desempenho dos modelos e identificar aquele com melhor poder preditivo.
+
+---
+
+## 📈 Resultados e Discussão
+
+- O **modelo LASSO** apresentou melhor equilíbrio entre **interpretação e desempenho**, sendo mais parcimonioso e eficiente.  
+- O **Random Forest** mostrou alta acurácia, mas menor interpretabilidade.  
+- O **GLM** simples teve bom desempenho geral, com resultados estáveis e facilmente comunicáveis.  
+
+De modo geral, as variáveis relacionadas a **vendas (sales_log1p)** e **idade da empresa (age_years)** tiveram peso significativo na predição do churn.
 
 ---
 
 ## 🧩 Ferramentas Utilizadas
 
-- **R (versão 4.3+)**  
-  Pacotes principais:  
-  `tidyverse`, `tidymodels`, `ggplot2`, `factoextra`, `cluster`, `xgboost`, `randomForest`, `yardstick`  
-- **R Markdown / knitr** para reprodutibilidade e formatação do relatório  
-- **GitHub** para versionamento e colaboração  
-
----
-
-## 📈 Resultados Esperados
-
-- Identificação de **perfis de empresas** com maior risco de churn  
-- Avaliação comparativa dos algoritmos de classificação  
-- Interpretação dos clusters obtidos e de suas características distintivas  
-- Geração de **insights** para a tomada de decisão baseada em dados  
+- **R** (versão 4.3+)  
+  - Principais pacotes:  
+    `tidyverse`, `tidymodels`, `themis`, `ggplot2`, `randomForest`, `glmnet`, `yardstick`
+- **Python (pré-processamento inicial)**
+- **R Markdown / knitr** para relatórios reprodutíveis  
+- **GitHub** para versionamento  
 
 ---
 
@@ -74,38 +82,34 @@ O foco da análise é compreender **fatores que influenciam a sobrevivência e o
 
 ```text
 projeto_integrador_1tri/
-├── Insper-DS-Projeto-Integrador-2025.pdf           # Relatório final
-├── projeto_integrador_ilana_izabelle_julia_livia.Rmd  # Código fonte em R
-├── projeto_integrador_ilana_izabelle_julia_livia.html # Relatório HTML gerado
-├── cs_bisnode_panel.csv                            # Base de dados original
-├── bisnode_variable_names.xls                      # Dicionário de variáveis
-├── dataset_modelagem_final.csv                     # Base final tratada
-└── README.md                                       # Este arquivo
+├── projeto_integrador_ilana_izabelle_julia_livia.Rmd   # Código-fonte principal em R
+├── projeto_integrador_ilana_izabelle_julia_livia.html  # Relatório renderizado
+├── cs_bisnode_panel.csv                                # Base de dados original
+├── dataset_modelagem_final.csv                         # Base tratada para modelagem
+├── bisnode_variable_names.xls                          # Dicionário de variáveis
+└── README.md                                           # Este arquivo
 ```
 
 ---
 
 ## 💡 Como Reproduzir
 
-1. **Clone o repositório:**
-
+1. **Clone este repositório:**
    ```bash
    git clone https://github.com/silvaizabelle/projeto_integrador_1tri.git
    cd projeto_integrador_1tri
    ```
 
-2. **Abra o arquivo R Markdown:**
-
+2. **Abra o R Markdown:**
    ```r
    rmarkdown::render("projeto_integrador_ilana_izabelle_julia_livia.Rmd")
    ```
 
 3. **Instale os pacotes necessários:**
-
    ```r
    install.packages(c(
-     "tidyverse", "tidymodels", "factoextra",
-     "cluster", "xgboost", "randomForest", "yardstick"
+     "tidyverse", "tidymodels", "themis", "randomForest",
+     "glmnet", "ggplot2", "yardstick"
    ))
    ```
 
@@ -122,5 +126,5 @@ projeto_integrador_1tri/
 
 ## 📚 Licença
 
-Este projeto é de uso acadêmico e segue os princípios de **reprodutibilidade e transparência científica**.  
-Sinta-se à vontade para explorar e adaptar, mencionando a fonte.
+Projeto desenvolvido para fins **acadêmicos** no **Insper**.  
+Pode ser reutilizado e adaptado com a devida citação da fonte.
