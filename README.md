@@ -40,9 +40,12 @@ Principais características da base:
 
 ### 2. Modelagem
 Foram testados três modelos principais:
-- **Regressão Logística (GLM)**  
-- **LASSO (Regularização L1)**  
-- **Random Forest**
+- Regressão Logística
+- Ridge Regression
+- LASSO
+- Árvore de Decisão
+- Random Forest
+- XGBoost
 
 ### 3. Avaliação
 O desempenho foi comparado usando as seguintes métricas:
